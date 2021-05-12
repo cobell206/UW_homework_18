@@ -18,6 +18,8 @@ request.onupgradeneeded = function (event) {
     const { oldVersion } = event
     const newVersion = event.newVersion || db.version
 
+    console.log(`Changed to ${newVersion} from ${oldVersion}`);
+
     db = event.target.result
     if (db.objectStoreNames.length === 0) {
         db.createObjectStore(dbStore, {autoIncrement: true})
