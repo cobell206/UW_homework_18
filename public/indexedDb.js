@@ -1,6 +1,7 @@
 let db
 let budgetVersion
-const dbName = 'budgetStorage'
+// const dbName = 'budgetStorage'
+const dbName = 'BudgetDB'
 
 var request = indexedDB.open(dbName, budgetVersion || 21)
 
@@ -40,8 +41,8 @@ function emptyDatabase() {
                     "Content-Type": "application/json"
                   }
             })
-                .then(response => response.json())
-                .then(res => {
+                .then((response) => response.json())
+                .then((res) => {
                     if (res.length !== 0) {
                         transaction = db.transaction([dbName], 'readwrite')
                         const currentStore = transaction.objectStore(dbName)
