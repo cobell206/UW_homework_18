@@ -2,7 +2,7 @@ let db
 let budgetVersion
 const dbName = 'budgetStorage'
 
-var request = indexedDB.open('BudgetDB', budgetVersion || 21)
+var request = indexedDB.open(dbName, budgetVersion || 21)
 
 function checkForIndexedDb() {
     if (!window.indexedDB) {
@@ -14,7 +14,7 @@ function checkForIndexedDb() {
 
 request.onupgradeneeded = function (event) {
     const { oldVersion } = event
-    const newVersion = event.newVersion || db.newVersion
+    const newVersion = event.newVersion || db.version
 
     db = event.target.result
     if (db.objectStoreNames.length === 0) {
@@ -40,7 +40,7 @@ function emptyDatabase() {
                     "Content-Type": "application/json"
                   }
             })
-                .then(response => response.json)
+                .then(response => response.json())
                 .then(res => {
                     if (res.length !== 0) {
                         transaction = db.transaction([dbName], 'readwrite')
