@@ -2,6 +2,7 @@ let db
 let budgetVersion
 // const dbName = 'budgetStorage'
 const dbName = 'BudgetDB'
+const dbStore = 'BudgetStore'
 
 var request = indexedDB.open(dbName, budgetVersion || 21)
 
@@ -19,15 +20,15 @@ request.onupgradeneeded = function (event) {
 
     db = event.target.result
     if (db.objectStoreNames.length === 0) {
-        db.createObjectStore(dbName, {autoIncrement: true})
+        db.createObjectStore(dbStore, {autoIncrement: true})
     }
 }
   
 function emptyDatabase() {
        
-    let tx = db.transaction([dbName], 'readwrite')
+    let tx = db.transaction([dbStore], 'readwrite')
 
-    const store = tx.objectStore(dbName)
+    const store = tx.objectStore(dbStore)
     const getAll = store.getAll()
 
     getAll.onsuccess = function () {
@@ -44,10 +45,10 @@ function emptyDatabase() {
                 .then((response) => response.json())
                 .then((res) => {
                     if (res.length !== 0) {
-                        transaction = db.transaction([dbName], 'readwrite')
-                        const currentStore = transaction.objectStore(dbName)
+                        transaction = db.transaction([dbStore], 'readwrite')
+                        const currentStore = transaction.objectStore(dbStore)
                         currentStore.clear()
-                        console.log(`Cleared store from ${dbName}`);
+                        console.log(`Cleared store from ${dbStore}`);
                     }
                 })
         }
@@ -65,9 +66,9 @@ request.onsuccess = function (event) {
   
 const saveRecord = (record) => {
 
-    const transaction = db.transaction(dbName, 'readwrite')
+    const transaction = db.transaction(dbStore, 'readwrite')
 
-    const store = transaction.objectStore(dbName)
+    const store = transaction.objectStore(dbStore)
     store.add(record)
 
     console.log('Record saved');
